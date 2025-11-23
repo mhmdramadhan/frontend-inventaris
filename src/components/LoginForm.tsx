@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { login } from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   onLoginSuccess: () => void;
 }
 
 const LoginForm: React.FC<Props> = ({ onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,7 +21,9 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess }) => {
       const token = await login(email, password);
       localStorage.setItem('token', token);
       onLoginSuccess();
+      navigate("/"); // redirect ke dashboard
     } catch (err: any) {
+      console.log(err);
       setError(err.message);
     } finally {
       setLoading(false);
