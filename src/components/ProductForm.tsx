@@ -1,36 +1,67 @@
-import React, { useState } from 'react';
-import { createProduct } from '../api/api';
-import { X, Package, Tag, Hash, DollarSign, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { createProduct, updateProduct } from '../api/api';
+import {
+  X,
+  Package,
+  Tag,
+  Hash,
+  DollarSign,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+} from 'lucide-react';
+import type { Product } from '../types';
 
 interface Props {
+  initialData?: Product | null;
   onSuccess: () => void;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
-const ProductForm: React.FC<Props> = ({ onSuccess, onClose }) => {
+const ProductForm: React.FC<Props> = ({ onSuccess, onClose, initialData }) => {
   const [name, setName] = useState('');
   const [sku, setSku] = useState('');
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
+  const isEditMode = !!initialData;
+
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setSku(initialData.sku);
+      setQuantity(initialData.quantity);
+      setPrice(initialData.price);
+    }
+  }, [initialData]);
 
   const handleSubmit = async () => {
     setLoading(true);
     setMessage(null);
     try {
-      await createProduct({ name, sku, quantity, price });
+      if (isEditMode) {
+        await updateProduct(initialData.id, { name, sku, quantity, price });
+      } else {
+        await createProduct({ name, sku, quantity, price });
+      }
       setMessage({ type: 'success', text: 'Produk berhasil ditambahkan!' });
       setName('');
       setSku('');
       setQuantity(0);
       setPrice(0);
-      
+
       setTimeout(() => {
         onSuccess();
       }, 1500);
     } catch (err: any) {
-      setMessage({ type: 'error', text: err.message || 'Gagal menambahkan produk' });
+      setMessage({
+        type: 'error',
+        text: err.message || 'Gagal menambahkan produk',
+      });
     } finally {
       setLoading(false);
     }
@@ -46,8 +77,12 @@ const ProductForm: React.FC<Props> = ({ onSuccess, onClose }) => {
               <Package className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white">Tambah Produk Baru</h2>
-              <p className="text-blue-100 text-sm mt-0.5">Lengkapi informasi produk di bawah ini</p>
+              <h2 className="text-xl font-bold text-white">
+                Tambah Produk Baru
+              </h2>
+              <p className="text-blue-100 text-sm mt-0.5">
+                Lengkapi informasi produk di bawah ini
+              </p>
             </div>
           </div>
           {onClose && (
@@ -161,7 +196,9 @@ const ProductForm: React.FC<Props> = ({ onSuccess, onClose }) => {
         {price > 0 && (
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 font-medium">Total Nilai Stok:</span>
+              <span className="text-sm text-slate-600 font-medium">
+                Total Nilai Stok:
+              </span>
               <span className="text-lg font-bold text-slate-900">
                 Rp {(price * quantity).toLocaleString('id-ID')}
               </span>

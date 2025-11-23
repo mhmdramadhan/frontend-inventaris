@@ -25,6 +25,14 @@ export const createProduct = async (product: Omit<Product, 'id'>) => {
   return data;
 };
 
+export const updateProduct = async (
+  id: number,
+  product: Omit<Product, 'id'>
+) => {
+  const { data } = await api.put(`/products/${id}`, product);
+  return data;
+};
+
 export const login = async (email: string, password: string) => {
   const { data } = await api.post('/login', { email, password });
   return data.token;
