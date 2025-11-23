@@ -1,73 +1,114 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 📦 Product Dashboard — React
 
-Currently, two official plugins are available:
+## Fitur Utama
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🔐 Autentikasi
+- Login menggunakan username & password.
+- Token disimpan di localStorage.
+- Halaman tertentu hanya bisa diakses jika sudah login.
+- Jika belum login → redirect otomatis ke /login.
 
-## React Compiler
+### 📦 Produk
+- Menampilkan daftar produk.
+- Tambah produk (login required).
+- Edit produk (login required).
+- Refresh data produk.
+- Modal form tambah/edit.
+- Validasi error & state loading.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📁 Struktur Folder
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+│
+├── api/
+│   └── api.ts
+│
+├── components/
+│   ├── ProductList.tsx
+│   └── ProductForm.tsx
+│   └── LoginForm.tsx
+│   └── Navbar.tsx
+│
+├── pages/
+│   ├── Login.tsx
+│   └── Dashboard.tsx
+│
+├── types/
+│   └── index.ts
+│
+└── App.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
+## 🔧 Instalasi
+
+### 1. Clone repository
+```bash
+git clone <url-repo>
+cd frontend-inventaris
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Jalankan project
+```bash
+npm run dev
+```
+
+Aplikasi berjalan di:
+```
+http://localhost:5173
+```
+
+Backend berjalan di:
+```
+http://localhost:8000
+```
+
+---
+
+## 🔐 Login
+
+Endpoint:
+```
+POST /login
+```
+
+Response:
+```json
+{
+  "token": "your-jwt-token"
+}
+```
+
+Simpan token:
 ```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+localStorage.setItem("token", token);
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 🚀 CRUD Produk
+
+### GET — daftar produk
+```
+GET /products
+```
+
+### POST — tambah produk
+```
+POST /products
+```
+
+### PUT — edit produk
+```
+PUT /products/:id
 ```

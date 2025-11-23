@@ -110,12 +110,7 @@ const Dashboard: React.FC = () => {
                   {loading ? '...' : products.length}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-4 border border-emerald-100">
-                <div className="text-sm text-slate-600 font-medium">Status</div>
-                <div className="text-2xl font-bold text-emerald-600 mt-1">
-                  {loading ? 'Loading...' : 'Active'}
-                </div>
-              </div>
+              
               <div className="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-4 border border-violet-100">
                 <div className="text-sm text-slate-600 font-medium">
                   Last Update
